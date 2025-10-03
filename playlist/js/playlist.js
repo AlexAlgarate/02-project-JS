@@ -26,7 +26,15 @@ const musicCatalog = () => {
    * Adds a new playlist to the catalog.
    * @param {string} playlistName - The name of the new playlist.
    */
-  const createPlaylist = (playlistName) => {};
+  const createPlaylist = (playlistName) => {
+
+    const newPlaylist = {
+      name: playlistName,
+      songs: []
+    }
+    
+    playlists = [...playlists, newPlaylist]
+  };
 
   /**
    * Gets all playlists in the catalog.
@@ -83,8 +91,9 @@ const musicCatalog = () => {
     favoriteSong,
   };
 };
-const playlist1 = musicCatalog();
+const rockPlaylist = musicCatalog();
 
-console.log(playlist1.getAllPlaylists());
+rockPlaylist.createPlaylist("rock")
+console.log(rockPlaylist.getAllPlaylists());
 
 export default musicCatalog;
