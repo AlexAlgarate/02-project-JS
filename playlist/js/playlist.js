@@ -8,7 +8,6 @@
  */
 // Example: { title: 'Song Title', artist: 'Song Artist', genre: 'Song Genre', duration: 180, favorite: false }
 
-
 /**
  * @typedef {Object} Playlist
  * @property {string} name - The name of the playlist.
@@ -33,13 +32,13 @@ const musicCatalog = () => {
    * Gets all playlists in the catalog.
    * @returns {Playlist[]} The list of all playlists.
    */
-  const getAllPlaylists = () => {};
+  const getAllPlaylists = () => playlists;
 
   /**
    * Removes a playlist from the catalog.
    * @param {string} playlistName - The name of the playlist to remove.
    */
-    const removePlaylist = (playlistName) => {};
+  const removePlaylist = (playlistName) => {};
 
   /**
    * Adds a song to a specific playlist.
@@ -74,7 +73,18 @@ const musicCatalog = () => {
    */
   const sortSongs = (playlistName, criterion) => {};
 
-  return { createPlaylist, addSongToPlaylist, removeSongFromPlaylist, sortSongs, getAllPlaylists, removePlaylist, favoriteSong };
+  return {
+    createPlaylist,
+    addSongToPlaylist,
+    removeSongFromPlaylist,
+    sortSongs,
+    getAllPlaylists,
+    removePlaylist,
+    favoriteSong,
+  };
 };
+const playlist1 = musicCatalog();
+
+console.log(playlist1.getAllPlaylists());
 
 export default musicCatalog;
