@@ -27,13 +27,12 @@ const musicCatalog = () => {
    * @param {string} playlistName - The name of the new playlist.
    */
   const createPlaylist = (playlistName) => {
-
     const newPlaylist = {
       name: playlistName,
-      songs: []
-    }
-    
-    playlists = [...playlists, newPlaylist]
+      songs: [],
+    };
+
+    playlists = [...playlists, newPlaylist];
   };
 
   /**
@@ -46,7 +45,11 @@ const musicCatalog = () => {
    * Removes a playlist from the catalog.
    * @param {string} playlistName - The name of the playlist to remove.
    */
-  const removePlaylist = (playlistName) => {};
+  const removePlaylist = (playlistName) => {
+    playlists = playlists.filter((playlist) => {
+      return playlistName !== playlist.name;
+    });
+  };
 
   /**
    * Adds a song to a specific playlist.
@@ -91,9 +94,20 @@ const musicCatalog = () => {
     favoriteSong,
   };
 };
-const rockPlaylist = musicCatalog();
+const playlistLogger = musicCatalog();
 
-rockPlaylist.createPlaylist("rock")
-console.log(rockPlaylist.getAllPlaylists());
+console.log('Create rock playlist');
+playlistLogger.createPlaylist('rock');
+playlistLogger.createPlaylist('pop');
+
+console.log('Get all the playlists');
+console.log(playlistLogger.getAllPlaylists());
+
+console.log("Let's remove pop playlist");
+playlistLogger.removePlaylist('pop');
+console.log(
+  'Las playlist disponibles después de borrar "pop" son: \n',
+  playlistLogger.getAllPlaylists()
+);
 
 export default musicCatalog;
