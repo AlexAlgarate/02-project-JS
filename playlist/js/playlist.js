@@ -57,7 +57,27 @@ const musicCatalog = () => {
    * @param {{ title: string, artist: string, genre: string, duration: number }} song - The song to add to the playlist.
    * @throws {Error} If the playlist is not found.
    */
-  const addSongToPlaylist = (playlistName, song) => {};
+  const addSongToPlaylist = (playlistName, song) => {
+    // Find the playlist by name
+    const playlist = playlists.find((p) => p.name === playlistName);
+    
+    // If playlist doesn't exist, throw an error
+    if (!playlist) {
+      throw new Error(`Playlist "${playlistName}" not found`);
+    }
+    
+    // Create a new song object
+    const newSong = {
+      title: song.title,
+      artist: song.artist,
+      genre: song.genre,
+      duration: song.duration,
+      favorite: song.favorite || false
+    };
+
+    // Add the song to the playlist
+    playlist.songs.push(newSong); // TODO spread operator
+  };
 
   /**
    * Removes a song from a specific playlist.
@@ -109,5 +129,24 @@ console.log(
   'Las playlist disponibles después de borrar "pop" son: \n',
   playlistLogger.getAllPlaylists()
 );
+const newSong1 = {
+  title:'test 1',
+  artist:'test 1',
+  genre:'test 1',
+  duration: 100,
+  favorite: false
+};
+const newSong2 = {
+  title: 'test 2',
+  artist:'test 2',
+  genre:'test 2',
+  duration:200,
+  favorite: true
+};
 
+playlistLogger.addSongToPlaylist('rock', newSong1);
+console.log('After SONG 1', playlistLogger.getAllPlaylists());
+playlistLogger.addSongToPlaylist('rock', newSong2);
+
+console.log('After SONG 2', playlistLogger.getAllPlaylists());
 export default musicCatalog;
