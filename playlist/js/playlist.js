@@ -39,16 +39,15 @@ const musicCatalog = () => {
    * Gets all playlists in the catalog.
    * @returns {Playlist[]} The list of all playlists.
    */
-  const getAllPlaylists = () => playlists;
+  const getAllPlaylists = () =>
+    playlists.map((playlist) => ({ ...playlist, songs: [...playlist.songs] }));
 
   /**
    * Removes a playlist from the catalog.
    * @param {string} playlistName - The name of the playlist to remove.
    */
   const removePlaylist = (playlistName) => {
-    playlists = playlists.filter((playlist) => {
-      return playlistName !== playlist.name;
-    });
+    playlists = playlists.filter((playlist) => playlistName !== playlist.name);
   };
 
   /**
@@ -60,23 +59,23 @@ const musicCatalog = () => {
   const addSongToPlaylist = (playlistName, song) => {
     // Find the playlist by name
     const playlist = playlists.find((p) => p.name === playlistName);
-    
+
     // If playlist doesn't exist, throw an error
     if (!playlist) {
       throw new Error(`Playlist "${playlistName}" not found`);
     }
-    
+
     // Create a new song object
     const newSong = {
       title: song.title,
       artist: song.artist,
       genre: song.genre,
       duration: song.duration,
-      favorite: song.favorite || false
+      favorite: song.favorite || false,
     };
 
     // Add the song to the playlist
-    playlist.songs.push(newSong); // TODO spread operator
+    playlist.songs = [...playlist.songs, newSong]; 
   };
 
   /**
@@ -130,23 +129,34 @@ console.log(
   playlistLogger.getAllPlaylists()
 );
 const newSong1 = {
-  title:'test 1',
-  artist:'test 1',
-  genre:'test 1',
+  title: 'test 1',
+  artist: 'test 1',
+  genre: 'test 1',
   duration: 100,
-  favorite: false
+  favorite: false,
 };
 const newSong2 = {
   title: 'test 2',
-  artist:'test 2',
-  genre:'test 2',
-  duration:200,
-  favorite: true
+  artist: 'test 2',
+  genre: 'test 2',
+  duration: 200,
+  favorite: true,
+};
+const newSong3 = {
+  title: 'test 3',
+  artist: 'test 3',
+  genre: 'test 3',
+  duration: 300,
+  favorite: true,
 };
 
 playlistLogger.addSongToPlaylist('rock', newSong1);
 console.log('After SONG 1', playlistLogger.getAllPlaylists());
-playlistLogger.addSongToPlaylist('rock', newSong2);
 
+playlistLogger.addSongToPlaylist('rock', newSong2);
 console.log('After SONG 2', playlistLogger.getAllPlaylists());
+
+playlistLogger.addSongToPlaylist('rock', newSong3);
+console.log('After SONG 3', playlistLogger.getAllPlaylists());
+
 export default musicCatalog;
