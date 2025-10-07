@@ -109,7 +109,16 @@ const musicCatalog = () => {
    * @param {string} title - The title of the song to mark as a favorite.
    * @returns {void}
    */
-  const favoriteSong = (playlistName, title) => {};
+  const favoriteSong = (playlistName, title) => {
+    // Find the playlist
+    const playlist = playlists.find((p) => p.name === playlistName);
+
+    // Find the song
+    const song = playlist.songs.find((song) => song.title === title);
+
+    // Change favorite status (default: false)
+    song.favorite = !song.favorite;
+  };
 
   /**
    * Sorts songs in a specific playlist by a given criterion (title, artist, or duration).
@@ -180,5 +189,10 @@ console.log('After SONG 3', playlistLogger.getAllPlaylists());
 
 playlistLogger.removeSongFromPlaylist('rock', 'test 2');
 console.log('After removing SONG 2', playlistLogger.getAllPlaylists());
+
+// change status favorite
+playlistLogger.favoriteSong('rock', 'test 1'); // false --> true
+playlistLogger.favoriteSong('rock', 'test 3'); // true --> false
+console.log('Favorite status', playlistLogger.getAllPlaylists());
 
 export default musicCatalog;
