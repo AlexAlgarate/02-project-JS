@@ -75,7 +75,7 @@ const musicCatalog = () => {
     };
 
     // Add the song to the playlist
-    playlist.songs = [...playlist.songs, newSong]; 
+    playlist.songs = [...playlist.songs, newSong];
   };
 
   /**
@@ -84,7 +84,24 @@ const musicCatalog = () => {
    * @param {string} title - The title of the song to remove.
    * @throws {Error} If the playlist or song is not found.
    */
-  const removeSongFromPlaylist = (playlistName, title) => {};
+  const removeSongFromPlaylist = (playlistName, title) => {
+    // Find the playlist by name
+    const playlist = playlists.find((p) => p.name === playlistName);
+
+    // If playlist doesn't exist, throw an error
+    if (!playlist) {
+      throw new Error(`Playlist "${playlistName}" not found`);
+    }
+
+    // If song does not exist, throw an error
+    const songExists = playlist.songs.find((song) => song.title === title);
+    if (!songExists) {
+      throw new Error(`Song "${songExists}" not found in ${playlistName}`);
+    }
+
+    // Replace playlist.songs without selected song
+    playlist.songs = playlist.songs.filter((song) => song.title !== title);
+  };
 
   /**
    * Marks a song as a favorite or removes the favorite status.
@@ -158,5 +175,10 @@ console.log('After SONG 2', playlistLogger.getAllPlaylists());
 
 playlistLogger.addSongToPlaylist('rock', newSong3);
 console.log('After SONG 3', playlistLogger.getAllPlaylists());
+
+// remove song 2
+
+playlistLogger.removeSongFromPlaylist('rock', 'test 2');
+console.log('After removing SONG 2', playlistLogger.getAllPlaylists());
 
 export default musicCatalog;
