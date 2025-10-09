@@ -128,30 +128,35 @@ const musicCatalog = () => {
    * @throws {Error} If the playlist is not found or the criterion is invalid.
    */
   const sortSongs = (playlistName, criterion) => {
-    // Find playlist index
+    // Is criterion valid?
     const validCriteria = ['title', 'artist', 'duration'];
+
     if (!validCriteria.includes(criterion)) {
       throw new Error(
         `Invalid criterion: ${criterion}. Must be one of: ${validCriteria.join(', ')}`
       );
     }
+
     const playlistIndex = playlists.findIndex((p) => p.name === playlistName);
+
+    // Does playlist exist?
     if (playlistIndex === -1) {
       throw new Error('List not found!');
     }
 
-    const sortedSongs = [...playlists[playlistIndex].songs].sort((a, b) => {
-      if (criterion === 'duration') {
-        return a.duration - b.duration;
-      }
-      // Ensure values are strings before comparing to avoid runtime errors
-      return a[criterion].localeCompare(b[criterion]);
-    });
+    // Duration (Number), title/artist (String)
+    const compareFunction =
+      criterion === 'duration'
+        ? (a, b) => a.duration - b.duration
+        : (a, b) => a[criterion].localeCompare(b[criterion]);
 
-    const playlist = playlists[playlistIndex];
+    // Create a copy of playlists with sorted songs
+    const sortedSongs = [...playlists[playlistIndex].songs].sort(compareFunction);
+
+    // Return a copy of playlists with the sorted playlist
     playlists = [
       ...playlists.slice(0, playlistIndex),
-      { ...playlist, songs: sortedSongs },
+      { ...playlists[playlistIndex], songs: sortedSongs },
       ...playlists.slice(playlistIndex + 1),
     ];
   };
@@ -220,5 +225,7 @@ playlistLogger.sortSongs('rock', 'title');
 // artist --> test 2 -> test 3 -> test 1
 playlistLogger.sortSongs('rock', 'artist');
 playlistLogger.sortSongs('hardcore', 'artist');
+console.log('\n\n todas las listas', playlistLogger.getAllPlaylists());
+playlistLogger.removeSongFromPlaylist('techno', 'test dfg');
 console.log('\n\n todas las listas', playlistLogger.getAllPlaylists());
 export default musicCatalog;
