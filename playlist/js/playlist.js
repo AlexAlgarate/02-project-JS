@@ -127,7 +127,34 @@ const musicCatalog = () => {
    * @returns {void}
    * @throws {Error} If the playlist is not found or the criterion is invalid.
    */
-  const sortSongs = (playlistName, criterion) => {};
+  const sortSongs = (playlistName, criterion) => {
+    // Find playlist index
+    const validCriteria = ['title', 'artist', 'duration'];
+    if (!validCriteria.includes(criterion)) {
+      throw new Error(
+        `Invalid criterion: ${criterion}. Must be one of: ${validCriteria.join(', ')}`
+      );
+    }
+    const playlistIndex = playlists.findIndex((p) => p.name === playlistName);
+    if (playlistIndex === -1) {
+      throw new Error('List not found!');
+    }
+
+    const sortedSongs = [...playlists[playlistIndex].songs].sort((a, b) => {
+      if (criterion === 'duration') {
+        return a.duration - b.duration;
+      }
+      // Ensure values are strings before comparing to avoid runtime errors
+      return a[criterion].localeCompare(b[criterion]);
+    });
+
+    const playlist = playlists[playlistIndex];
+    playlists = [
+      ...playlists.slice(0, playlistIndex),
+      { ...playlist, songs: sortedSongs },
+      ...playlists.slice(playlistIndex + 1),
+    ];
+  };
 
   return {
     createPlaylist,
@@ -141,58 +168,57 @@ const musicCatalog = () => {
 };
 const playlistLogger = musicCatalog();
 
-console.log('Create rock playlist');
 playlistLogger.createPlaylist('rock');
 playlistLogger.createPlaylist('pop');
+playlistLogger.createPlaylist('hardcore');
+playlistLogger.createPlaylist('techno');
 
-console.log('Get all the playlists');
+console.log('Get all playlists. All playlists should be empty.');
 console.log(playlistLogger.getAllPlaylists());
 
-console.log("Let's remove pop playlist");
-playlistLogger.removePlaylist('pop');
-console.log(
-  'Las playlist disponibles después de borrar "pop" son: \n',
-  playlistLogger.getAllPlaylists()
-);
 const newSong1 = {
-  title: 'test 1',
-  artist: 'test 1',
+  title: 'test aac',
+  artist: 'test dfg',
   genre: 'test 1',
   duration: 100,
   favorite: false,
 };
 const newSong2 = {
-  title: 'test 2',
-  artist: 'test 2',
+  title: 'test abc',
+  artist: 'test aaa',
   genre: 'test 2',
   duration: 200,
   favorite: true,
 };
 const newSong3 = {
-  title: 'test 3',
-  artist: 'test 3',
+  title: 'test dfg',
+  artist: 'test aab',
   genre: 'test 3',
-  duration: 300,
+  duration: 40,
   favorite: true,
 };
 
 playlistLogger.addSongToPlaylist('rock', newSong1);
-console.log('After SONG 1', playlistLogger.getAllPlaylists());
+playlistLogger.addSongToPlaylist('pop', newSong1);
+playlistLogger.addSongToPlaylist('hardcore', newSong1);
+playlistLogger.addSongToPlaylist('techno', newSong1);
 
 playlistLogger.addSongToPlaylist('rock', newSong2);
-console.log('After SONG 2', playlistLogger.getAllPlaylists());
+playlistLogger.addSongToPlaylist('pop', newSong2);
+playlistLogger.addSongToPlaylist('hardcore', newSong2);
+playlistLogger.addSongToPlaylist('techno', newSong2);
 
 playlistLogger.addSongToPlaylist('rock', newSong3);
-console.log('After SONG 3', playlistLogger.getAllPlaylists());
+playlistLogger.addSongToPlaylist('pop', newSong3);
+playlistLogger.addSongToPlaylist('hardcore', newSong3);
+playlistLogger.addSongToPlaylist('techno', newSong3);
 
-// remove song 2
-
-playlistLogger.removeSongFromPlaylist('rock', 'test 2');
-console.log('After removing SONG 2', playlistLogger.getAllPlaylists());
-
-// change status favorite
-playlistLogger.favoriteSong('rock', 'test 1'); // false --> true
-playlistLogger.favoriteSong('rock', 'test 3'); // true --> false
-console.log('Favorite status', playlistLogger.getAllPlaylists());
-
+// duration --> test 3 -> test 1 -> test 2
+playlistLogger.sortSongs('rock', 'duration');
+// title --> test 1 -> test 2 -> test 3
+playlistLogger.sortSongs('rock', 'title');
+// artist --> test 2 -> test 3 -> test 1
+playlistLogger.sortSongs('rock', 'artist');
+playlistLogger.sortSongs('hardcore', 'artist');
+console.log('\n\n todas las listas', playlistLogger.getAllPlaylists());
 export default musicCatalog;
