@@ -27,6 +27,11 @@ const musicCatalog = () => {
    * @param {string} playlistName - The name of the new playlist.
    */
   const createPlaylist = (playlistName) => {
+    // Check if a playlist with this name already exists
+    if (playlists.some((playlist) => playlist.name === playlistName)) {
+      throw new Error(`A playlist named "${playlistName}" already exists`);
+    }
+
     const newPlaylist = {
       name: playlistName,
       songs: [],
