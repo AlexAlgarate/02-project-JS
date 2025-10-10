@@ -108,6 +108,12 @@ const musicCatalog = () => {
     playlist.songs = playlist.songs.filter((song) => song.title !== title);
   };
 
+  /**
+   * Marks a song as a favorite or removes the favorite status.
+   * @param {string} playlistName - The name of the playlist containing the song.
+   * @param {string} title - The title of the song to mark as a favorite.
+   * @returns {void}
+   */
   const favoriteSong = (playlistName, title) => {
     // Find the playlist
     const playlistIndex = playlists.findIndex((p) => p.name === playlistName);
