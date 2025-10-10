@@ -96,28 +96,41 @@ const musicCatalog = () => {
     // If song does not exist, throw an error
     const songExists = playlist.songs.find((song) => song.title === title);
     if (!songExists) {
-      throw new Error(`Song "${songExists}" not found in ${playlistName}`);
+      throw new Error(`Song "${title}" not found in playlist "${playlistName}"`);
     }
 
     // Replace playlist.songs without selected song
     playlist.songs = playlist.songs.filter((song) => song.title !== title);
   };
 
-  /**
-   * Marks a song as a favorite or removes the favorite status.
-   * @param {string} playlistName - The name of the playlist containing the song.
-   * @param {string} title - The title of the song to mark as a favorite.
-   * @returns {void}
-   */
   const favoriteSong = (playlistName, title) => {
     // Find the playlist
-    const playlist = playlists.find((p) => p.name === playlistName);
+    const playlistIndex = playlists.findIndex((p) => p.name === playlistName);
+    if (playlistIndex === -1) {
+      throw new Error(`Playlist "${playlistName}" not found`);
+    }
 
     // Find the song
-    const song = playlist.songs.find((song) => song.title === title);
+    const songIndex = playlists[playlistIndex].songs.findIndex(
+      (song) => song.title === title
+    );
+    if (songIndex === -1) {
+      throw new Error(`Song "${title}" not found in playlist "${playlistName}"`);
+    }
 
-    // Change favorite status (default: false)
-    song.favorite = !song.favorite;
+    // Create new playlist with updated song
+    const updatedSongs = [...playlists[playlistIndex].songs];
+    updatedSongs[songIndex] = {
+      ...updatedSongs[songIndex],
+      favorite: !updatedSongs[songIndex].favorite,
+    };
+
+    // Update playlists array immutably
+    playlists = [
+      ...playlists.slice(0, playlistIndex),
+      { ...playlists[playlistIndex], songs: updatedSongs },
+      ...playlists.slice(playlistIndex + 1),
+    ];
   };
 
   /**
